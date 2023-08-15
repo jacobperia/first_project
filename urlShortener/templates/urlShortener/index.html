@@ -1,0 +1,37 @@
+<div
+  style="
+    align-items: center;
+    display: flex-column;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+  "
+>
+  <form action="{% url 'urlShortener:shorten' %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+      {% if error_message %}
+      <p><strong>{{ error_message }}</strong></p>
+      {% endif %}
+
+      <label for="original_url">Enter a URL:</label>
+      <input type="url" name="original_url" id="original_url" placeholder="https://example.com" required />
+    </fieldset>
+    <input type="submit" value="Shorten URL" />
+  </form>
+
+  {% if short_url_list %}
+  <h1>List of Shortened URLs</h1>
+  <ul>
+    {% for url in short_url_list %}
+    <li>
+        <span><b>Link {{ forloop.counter }}: {{url.original_url}}</b></span>
+      <a href="{% url 'urlShortener:detail' url.id %}" style='color: brown;'>View Details</a>
+      <a href="{{url.original_url}}" target='_blank' style='color: cadetblue;'>Go to URL</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No Shortened URLs to see.</p>
+  {% endif %}
+</div>
